@@ -12,27 +12,45 @@ const initdb = async () =>
     },
   });
 
+// TODO: Add logic to a method that accepts some content and adds it to the database
 export const putDb = async (content) => {
-  const db = await openDB("jate", 1);
-  const tx = db.transaction("jate", "readwrite");
+  const jDb = await openDB("jate", 1);
+
+  // Create a new transaction and specify the database and data privileges.
+  const tx = jDb.transaction("jate", "readwrite");
+
+  // Open up the desired object store.
   const store = tx.objectStore("jate");
-  // Test
-  const request = store.put({
-    id: 1,
-    value: content,
-  });
-  // Test
-  await store.add(content);
-  await tx.done;
+
+  // Use the .getAll() method to get all data in the database.
+  const request = store.put({ id: 1, value: content });
+
+  // Get confirmation of the request.
+  const result = await request;
+  console.log("result.value", result);
+  // return result.value;
 };
 
+// TODO: Add logic for a method that gets all the content from the database
 export const getDb = async () => {
-  const db = await openDB("jate", 1);
-  const tx = db.transaction("jate", "readonly");
+  console.log("GET from the database");
+
+  // Create a connection to the database database and version we want to use.
+  const jDb = await openDB("jate", 1);
+
+  // Create a new transaction and specify the database and data privileges.
+  const tx = jDb.transaction("jate", "readonly");
+
+  // Open up the desired object store.
   const store = tx.objectStore("jate");
-  const content = await store.getAll();
-  await tx.done;
-  return content;
+
+  // Use the .getAll() method to get all data in the database.
+  const request = store.getAll();
+
+  // Get confirmation of the request.
+  const result = await request;
+  console.log("result.value", result);
+  return result.value;
 };
 
 initdb();
